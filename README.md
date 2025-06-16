@@ -1,124 +1,175 @@
-# API de Gestion de Mariage
+# Wedding Planner
 
-## 📋 Table des Matières
-- [Aperçu](#aperçu)
-- [Structure du Projet](#structure-du-projet)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [API Endpoints](#api-endpoints)
-- [Modèles](#modèles)
+A modern, full-stack wedding planning application to manage weddings, guests, vendors, tasks, and budgets with a beautiful and interactive UI.
 
-## 🎯 Aperçu
+---
 
-API RESTful pour la gestion de mariages, permettant de gérer les invités, les prestataires, les budgets et les événements de mariage.
+## ✨ Features
 
-## 📁 Structure du Projet
+- User authentication (register/login)
+- Dashboard with wedding overview and management
+- Create, edit, and delete weddings
+- Manage guests (RSVP, +1, status)
+- Manage vendors (type, contact, assignment)
+- Task management (to-dos, priorities, deadlines)
+- Budget tracking (spending, categories, status)
+- Responsive, modern UI with beautiful effects (e.g. sakura petals)
+- Demo account for quick testing
 
-```
-server/
-├── src/
-│   ├── config/
-│   │   ├── app.config.js
-│   │   ├── database.config.js
-│   │   └── dotenv.config.js
-│   ├── middleware/
-│   │   └── config.logger.js
-│   └── resources/
-│       ├── wedding/
-│       ├── vendor/
-│       ├── guest/
-│       └── budget/
-```
+---
 
-## 🚀 Installation
+## 🛠️ Tech Stack
 
-1. **Cloner le dépôt:**
-   ```bash
-   git clone <url-du-dépôt>
-   cd wedding
-   ```
+- **Frontend:** React, TypeScript, React Router, React Hot Toast, CSS (custom)
+- **Backend:** Node.js, Express, MongoDB (Mongoose)
+- **Authentication:** JWT (JSON Web Token)
+- **Other:** Toast notifications, Unsplash backgrounds, Sakura petal animation
 
-2. **Installer les dépendances:**
-   ```bash
-   npm install
-   ```
+---
 
-3. **Configuration de l'environnement:**
-   Créer un fichier `.env` à la racine du projet:
-   ```env
-   PORT=3000
-   MONGODB_URI=mongodb+srv://admin:gkfAqupt0mbo9u9h@wedding-planner-db-test.xhdmhed.mongodb.net/?retryWrites=true&w=majority&appName=wedding-planner-db-test
-   JWT_SECRET=your_super_secret_jwt_key_change_this_in_production
-   ```
+## 📦 Main Data Models
 
-4. **Démarrer le serveur:**
-   ```bash
-   npm run dev
-   ```
+### User
 
-## ⚙️ Configuration
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| name       | String  | User's full name    |
+| email      | String  | User's email (unique) |
+| password   | String  | Hashed password     |
+| timestamps | Object  | Created/updated at  |
 
-Le projet utilise trois fichiers de configuration principaux :
+---
 
-- `app.config.js` : Configuration de l'application Express
-- `database.config.js` : Configuration de la connexion MongoDB
-- `dotenv.config.js` : Configuration des variables d'environnement
+### Wedding
 
-## 📚 API Endpoints
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| name       | String  | Wedding name        |
+| date       | Date    | Wedding date        |
+| place      | String  | Location            |
+| vendors    | [ObjectId] | Linked vendors   |
+| timestamps | Object  | Created/updated at  |
 
-### Mariages (Weddings)
+---
 
-```http
-GET /api/weddings
-POST /api/weddings
-GET /api/weddings/:id
-PUT /api/weddings/:id
-DELETE /api/weddings/:id
-```
+### Guest
 
-### Invités (Guests)
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| wedding    | ObjectId| Linked wedding      |
+| name       | String  | Guest name          |
+| RSVP       | Boolean | RSVP status         |
+| plusOne    | Boolean | Has +1              |
+| status     | String  | 'pending', 'confirmed', 'cancelled' |
+| timestamps | Object  | Created/updated at  |
 
-```http
-GET /api/guests
-POST /api/guests
-GET /api/guests/:id
-PUT /api/guests/:id
-DELETE /api/guests/:id
-```
+---
 
-### Prestataires (Vendors)
+### Vendor
 
-```http
-GET /api/vendors
-POST /api/vendors
-GET /api/vendors/:id
-PUT /api/vendors/:id
-DELETE /api/vendors/:id
-```
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| name       | String  | Vendor name         |
+| type       | String  | 'photographer', 'caterer', 'decorator', 'musician', 'transportation' |
+| contact    | String  | Contact info        |
+| wedding    | ObjectId| Linked wedding      |
 
-### Budgets
+---
 
-```http
-GET /api/budgets
-POST /api/budgets
-GET /api/budgets/:id
-PUT /api/budgets/:id
-DELETE /api/budgets/:id
-```
+### Task (Todo)
 
-## 📝 Modèles
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| wedding    | ObjectId| Linked wedding      |
+| title      | String  | Task title          |
+| description| String  | Task details        |
+| completed  | Boolean | Done or not         |
+| priority   | String  | 'low', 'medium', 'high' |
+| dueDate    | Date    | Deadline            |
+| category   | String  | 'planning', 'venue', 'catering', etc. |
+| timestamps | Object  | Created/updated at  |
 
-### Invité (Guest)
-```javascript
-{
-    wedding: ObjectId,  // Référence au mariage
-    name: String,       // Nom de l'invité
-    RSVP: Boolean,      // Statut de réponse
-    plusOne: Boolean,   // Accompagnant
-    status: String      // Statut (pending, confirmed, cancelled)
-}
+---
+
+### Budget
+
+| Field      | Type    | Description         |
+|------------|---------|---------------------|
+| wedding    | ObjectId| Linked wedding      |
+| spending   | Number  | Amount spent        |
+| totalBudget| Number  | Total budget        |
+| category   | String  | Budget category     |
+| description| String  | Details             |
+| status     | String  | 'pending', 'approved', 'rejected' |
+| timestamps | Object  | Created/updated at  |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/wedding-planner.git
+cd wedding-planner
 ```
 
-## 🔧 Middleware
+### 2. Install dependencies
 
-Le projet utilise un middleware de logging configuré dans `config.logger.js` pour le suivi des requêtes et des erreurs.
+```bash
+cd server
+npm install
+cd ../client
+npm install
+```
+
+### 3. Configure environment
+
+- Copy `.env.example` to `.env` in the `server` folder and fill in your MongoDB URI and JWT secret.
+
+### 4. Start the app
+
+```bash
+# In one terminal
+cd server
+npm run dev
+
+# In another terminal
+cd client
+npm start
+```
+
+The app will be available at [http://localhost:3000](http://localhost:3000) (or your configured port).
+
+---
+
+## 🧪 Demo Account
+
+You can use the following credentials to test the app:
+
+- **Email:** demo@weddingplanner.com
+- **Password:** Demo123!
+
+---
+
+## 🎨 Special UI Features
+
+- Sakura petal animation (can be toggled in code)
+- Unsplash backgrounds on login/register
+- Modern, accessible, and responsive design
+
+---
+
+## 🤝 Contributing
+
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+---
+
+## 📄 License
+
+[MIT](LICENSE)
+
+---
+
+*This README was generated to be as complete and safe as possible, with no sensitive data included.*
